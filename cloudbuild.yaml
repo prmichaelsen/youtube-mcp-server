@@ -1,0 +1,43 @@
+steps:
+  # Build Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/youtube-mcp:$SHORT_SHA'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/youtube-mcp:latest'
+      - '-f'
+      - 'Dockerfile.production'
+      - '.'
+
+  # Push Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'gcr.io/$PROJECT_ID/youtube-mcp:$SHORT_SHA'
+
+  # Deploy to Cloud Run
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+      - 'run'
+      - 'deploy'
+      - 'youtube-mcp'
+      - '--image=gcr.io/$PROJECT_ID/youtube-mcp:$SHORT_SHA'
+      - '--region=us-central1'
+      - '--platform=managed'
+      - '--allow-unauthenticated'
+      - '--min-instances=0'
+      - '--max-instances=10'
+      - '--memory=512Mi'
+      - '--cpu=1'
+      - '--timeout=60s'
+      - '--update-secrets=JWT_SECRET=youtube-mcp-jwt-secret:latest'
+      - '--update-secrets=PLATFORM_SERVICE_TOKEN=youtube-mcp-platform-token:latest'
+
+images:
+  - 'gcr.io/$PROJECT_ID/youtube-mcp:$SHORT_SHA'
+  - 'gcr.io/$PROJECT_ID/youtube-mcp:latest'
+
+options:
+  machineType: 'N1_HIGHCPU_8'
