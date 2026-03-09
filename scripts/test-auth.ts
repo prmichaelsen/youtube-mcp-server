@@ -2,7 +2,7 @@
 
 import jwt from 'jsonwebtoken';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'test-secret';
+const JWT_SECRET = process.env.PLATFORM_SERVICE_TOKEN || 'test-secret';
 const userId = process.argv[2] || 'test-user-123';
 
 // Generate test JWT

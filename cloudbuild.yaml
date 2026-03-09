@@ -32,8 +32,7 @@ steps:
       - '--memory=512Mi'
       - '--cpu=1'
       - '--timeout=60s'
-      - '--update-secrets=JWT_SECRET=youtube-mcp-jwt-secret:latest'
-      - '--update-secrets=PLATFORM_SERVICE_TOKEN=youtube-mcp-platform-token:latest'
+      - '--update-secrets=PLATFORM_SERVICE_TOKEN=youtube-mcp-platform-service-token:latest'
 
 images:
   - 'gcr.io/$PROJECT_ID/youtube-mcp:$SHORT_SHA'

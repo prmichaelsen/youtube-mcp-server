@@ -16,14 +16,15 @@ if (!env.PLATFORM_URL) {
   process.exit(1);
 }
 
-if (!env.JWT_SECRET) {
-  console.error('Error: JWT_SECRET environment variable is required');
+if (!env.PLATFORM_SERVICE_TOKEN) {
+  console.error('Error: PLATFORM_SERVICE_TOKEN environment variable is required');
   process.exit(1);
 }
 
-// Create auth provider
+// Create auth provider (PLATFORM_SERVICE_TOKEN is the shared secret
+// used by agentbase.me to sign JWTs and by this server to verify them)
 const authProvider = new JWTAuthProvider({
-  secret: env.JWT_SECRET,
+  secret: env.PLATFORM_SERVICE_TOKEN,
   issuer: env.JWT_ISSUER,
   audience: env.JWT_AUDIENCE,
   cacheResults: true,
