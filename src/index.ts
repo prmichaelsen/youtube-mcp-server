@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { wrapServer } from '@prmichaelsen/mcp-auth';
-import { createServer } from 'youtube-mcp/factory';
+import { createServer } from '@prmichaelsen/youtube-mcp/factory';
 import { JWTAuthProvider } from './auth/provider.js';
 import { PlatformTokenResolver } from './auth/token-resolver.js';
 import { env } from './config/environment.js';
