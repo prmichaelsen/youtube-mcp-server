@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl:*)",
+      "Bash(bash:*)",
+      "Bash(npm install:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npm:*)",
+      "Bash(gh repo:*)",
+      "Bash(git add:*)",
+      "Bash(git push:*)",
+      "Bash(gcloud auth:*)",
+      "Bash(gcloud config:*)",
+      "Bash(gcloud services:*)",
+      "Bash(gcloud secrets:*)",
+      "Bash(openssl rand:*)",
+      "Bash(gcloud run:*)",
+      "Bash(gcloud builds:*)",
+      "Bash(ls:*)",
+      "Bash(npx tsx:*)",
+      "Bash(gcloud logging:*)",
+      "Bash(node:*)",
+      "Bash(mv:*)",
+      "Bash(gcloud alpha:*)",
+      "Bash(grep:*)",
+      "Bash(python3:*)"
+    ]
+  }
+}

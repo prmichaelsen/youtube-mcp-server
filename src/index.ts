@@ -1,11 +1,7 @@
 #!/usr/bin/env node
 
 import { wrapServer } from '@prmichaelsen/mcp-auth';
-import { Server } from '@modelcontextprotocol/sdk/server/index.js';
-import {
-  ListToolsRequestSchema,
-  CallToolRequestSchema,
-} from '@modelcontextprotocol/sdk/types.js';
+import { createServer } from 'youtube-mcp/factory';
 import { JWTAuthProvider } from './auth/provider.js';
 import { PlatformTokenResolver } from './auth/token-resolver.js';
 import { env } from './config/environment.js';
@@ -38,93 +34,11 @@ const tokenResolver = new PlatformTokenResolver({
   cacheTtl: 5 * 60 * 1000, // 5 minutes
 });
 
-// Server factory: creates a new MCP server instance per user
-async function createServer(accessToken: string, userId: string): Promise<Server> {
-  const server = new Server(
-    {
-      name: 'youtube-mcp',
-      version: '1.0.0',
-    },
-    {
-      capabilities: {
-        tools: {},
-      },
-    }
-  );
-
-  // TODO: Add YouTube Data API v3 tools here
-  // Each tool will use the accessToken to make authenticated YouTube API calls
-
-  server.setRequestHandler(ListToolsRequestSchema, async () => {
-    return {
-      tools: [
-        {
-          name: 'youtube_search',
-          description: 'Search for YouTube videos',
-          inputSchema: {
-            type: 'object',
-            properties: {
-              query: {
-                type: 'string',
-                description: 'Search query',
-              },
-              maxResults: {
-                type: 'number',
-                description: 'Maximum number of results (1-50)',
-              },
-            },
-            required: ['query'],
-          },
-        },
-      ],
-    };
-  });
-
-  server.setRequestHandler(CallToolRequestSchema, async (request) => {
-    const { name, arguments: args = {} } = request.params;
-
-    if (name === 'youtube_search') {
-      const query = args.query as string;
-      const maxResults = (args.maxResults as number) || 5;
-
-      const url = new URL('https://www.googleapis.com/youtube/v3/search');
-      url.searchParams.set('part', 'snippet');
-      url.searchParams.set('q', query);
-      url.searchParams.set('maxResults', String(maxResults));
-      url.searchParams.set('type', 'video');
-
-      const response = await fetch(url.toString(), {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-
-      if (!response.ok) {
-        const error = await response.text();
-        throw new Error(`YouTube API error: ${response.status} ${error}`);
-      }
-
-      const data = await response.json();
-      return {
-        content: [
-          {
-            type: 'text',
-            text: JSON.stringify(data, null, 2),
-          },
-        ],
-      };
-    }
-
-    throw new Error(`Unknown tool: ${name}`);
-  });
-
-  return server;
-}
-
 // Wrap server with authentication
 const wrappedServer = wrapServer({
   serverFactory: async (accessToken: string, userId: string) => {
-    return await createServer(accessToken, userId);
+    console.log(`Creating server instance for user: ${userId}`);
+    return createServer(accessToken);
   },
   authProvider,
   tokenResolver,

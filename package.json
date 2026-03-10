@@ -1,5 +1,5 @@
 {
-  "name": "youtube-mcp",
+  "name": "@prmichaelsen/youtube-mcp-server",
   "version": "1.0.0",
   "description": "MCP server wrapping the YouTube Data API v3 for AI agents, mcp-auth enabled",
   "type": "module",
@@ -10,14 +10,17 @@
     "dev": "tsx watch src/index.ts",
     "start": "node dist/index.js",
     "test": "jest",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",
     "@prmichaelsen/mcp-auth": "^7.4.2",
+    "@prmichaelsen/youtube-mcp": "^1.1.0",
     "cors": "^2.8.5",
     "express": "^4.18.0",
-    "jsonwebtoken": "^9.0.0"
+    "jsonwebtoken": "^9.0.0",
+    "youtube-mcp": "^0.1.2"
   },
   "devDependencies": {
     "@types/jsonwebtoken": "^9.0.0",
