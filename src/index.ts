@@ -38,7 +38,8 @@ const tokenResolver = new PlatformTokenResolver({
 const wrappedServer = wrapServer({
   serverFactory: async (accessToken: string, userId: string) => {
     console.log(`Creating server instance for user: ${userId}`);
-    return createServer(accessToken);
+    const mcpServer = createServer(accessToken);
+    return mcpServer.server;
   },
   authProvider,
   tokenResolver,
